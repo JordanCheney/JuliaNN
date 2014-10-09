@@ -73,30 +73,8 @@ type Hidden
 end
 
 type Output
-    inputs::Array{Float64, 1}
-    activations::Array{Float64, 1}
-    outputs::Array{Float64, 1}
-
-    size::Int64
-
-    weights::Array{Float64, 2}
-    bias::Array{Float64, 1}
-
-    weight_gradients::Array{Float64, 2}
-    bias_gradients::Array{Float64, 1}
-
-    propagate::Function
-    train::Function
-    update::Function
-
     function Output(n_in::Int64, n_out::Int64)
-        this = new(zeros(n_in), zeros(n_out), zeros(n_out), n_out, rand(n_out, n_in), zeros(n_out), zeros(n_out, n_in), zeros(n_out))
-
-        function propagate(input::Array{Float64, 1})
-            this.inputs = input
-            this.activations = (this.weights * this.inputs) + this.bias
-            this.outputs = logistic(this.activations)
-        end
+        this = Hidden(n_in, n_out) # Output is the same as hidden except for a different train method
 
         function train(target::Array{Float64, 1}, learningRate::Float64)
             delta = this.outputs - target
@@ -105,14 +83,7 @@ type Output
             next_delta = this.weights.' * delta
         end
 
-        function update()
-            this.weights -= this.weight_gradients
-            this.bias -= this.bias_gradients
-        end
-
-        this.propagate = propagate
         this.train = train
-        this.update = update
 
         return this
     end 
