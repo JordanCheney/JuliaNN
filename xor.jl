@@ -13,6 +13,6 @@ println("----------+---------------------")
 println("   input  |       output")
 println("----------+---------------------")
 for input in inputs
-	output = brain.propagate(input)
-	println("$input | $output")
+    output = brain.propagate(input)
+    println("$input | $output")
 end
